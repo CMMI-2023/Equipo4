@@ -272,44 +272,104 @@ namespace Programa
                 string columnName = cell.OwningColumn.Name;
                 string value = cell.Value.ToString();
 
-                // Validar si se intenta modificar la fecha
-                if (columnName == "fecha")
+                // preparar consultas
+                if (columnName == "id")
+                {
+                    // Mostrar el InputBox para ingresar el nuevo valor
+                    string newValue = Interaction.InputBox($"Ingresa el nuevo valor para {columnName}:", "Actualizar valor", value);
+                    // Verificar si el usuario ingresó un valor
+                    if (!string.IsNullOrEmpty(newValue))
+                    {
+                        // Verificar si el valor ingresado es un número
+                        if (!int.TryParse(newValue, out int newId))
+                        {
+                            MessageBox.Show("El valor ingresado no es un número válido. Por favor, ingresa un número entero.");
+                            return;
+                        }
+
+                        // Verificar si el nuevo valor ya existe en el DataGridView
+                        bool duplicateFound = false;
+                        foreach (DataGridViewRow row in dataGridView1.Rows)
+                        {
+                            if (row.Index != dataGridView1.CurrentRow.Index && row.Cells["id"].Value.ToString() == newValue)
+                            {
+                                duplicateFound = true;
+                                break;
+                            }
+                        }
+
+                        if (duplicateFound)
+                        {
+                            MessageBox.Show($"El valor {newValue} ya existe en la tabla y no se puede usar como nuevo id.");
+                            return;
+                        }
+
+                        // Actualizar el valor en la base de datos
+                        string tableName = "siniestro";
+                        int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
+                        string condition = $"`id` = {id}";
+                        Dictionary<string, object> values = new Dictionary<string, object>
+                        {
+                            { columnName, newValue }
+                        };
+                        bool success = connector.Update(tableName, values, condition);
+
+                        if (success)
+                        {
+                            MessageBox.Show("El valor ha sido actualizado correctamente.");
+                            LlenarDataGridView();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha ocurrido un error al actualizar el valor.");
+                        }
+                    }
+
+                }
+                else if (columnName == "fecha")
                 {
                     // Validar el formato de la fecha
-                    Regex regex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
-                    if (!regex.IsMatch(value))
+                    // Crear un nuevo control TimePicker y configurarlo
+                    FrmTimePicker form = new FrmTimePicker();
+
+                    // Especificar el formulario padre y establecer la propiedad StartPosition en CenterParent
+                    form.Owner = this; // this hace referencia al formulario que llama a FrmTimePicker
+                    form.StartPosition = FormStartPosition.CenterParent;
+
+                    // Mostrar el formulario FrmTimePicker como un cuadro de diálogo modal
+                    form.ShowDialog();
+                    // Se ejecuta después de que se cierra el formulario secundario
+                    if (form.DialogResult == DialogResult.OK)
                     {
-                        MessageBox.Show("El formato de la fecha debe ser yyyy-MM-dd.");
-                        return;
+                        DateTime fechaSeleccionada = form.FechaSeleccionada;
+                        MessageBox.Show(fechaSeleccionada.ToString());
+                        // Haz lo que necesites con la fecha seleccionada
                     }
+                    //Regex regex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
+                    //if (!regex.IsMatch(value))
+                    //{
+                    //    MessageBox.Show("El formato de la fecha debe ser yyyy-MM-dd.");
+                    //    return;
+                    //}
                 }
-
-                // Mostrar el InputBox para ingresar el nuevo valor
-                string newValue = Interaction.InputBox($"Ingresa el nuevo valor para {columnName}:", "Actualizar valor", value);
-
-                // Verificar si el usuario ingresó un valor
-                if (!string.IsNullOrEmpty(newValue))
+                else if(columnName == "cliente_afectado")
                 {
-                    // Actualizar el valor en la base de datos
-                    string tableName = "siniestro";
-                    int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
-                    string condition = $"id = {id}";
-                    Dictionary<string, object> values = new Dictionary<string, object>
-        {
-            { columnName, newValue }
-        };
-                    bool success = connector.Update(tableName, values, condition);
-
-                    if (success)
-                    {
-                        MessageBox.Show("El valor ha sido actualizado correctamente.");
-                        LlenarDataGridView();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Ha ocurrido un error al actualizar el valor.");
-                    }
+                    
                 }
+                else if(columnName == "vehiculo_afectado")
+                {
+                    
+                }
+                else if(columnName == "danio")
+                {
+                    
+                }
+                else
+                {
+                    MessageBox.Show("No se puede actualizar esta columna.");
+                    return;
+                }
+
             }
             else
             {
@@ -317,8 +377,4 @@ namespace Programa
             }
         }
     }
-
-
-
-    
 }

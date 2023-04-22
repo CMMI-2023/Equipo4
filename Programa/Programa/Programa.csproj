@@ -12,6 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -99,6 +101,12 @@
     <Compile Include="FormAjustador.Designer.cs">
       <DependentUpon>FormAjustador.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmTimePicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTimePicker.Designer.cs">
+      <DependentUpon>FrmTimePicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +118,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAjustador.resx">
       <DependentUpon>FormAjustador.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTimePicker.resx">
+      <DependentUpon>FrmTimePicker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
