@@ -122,10 +122,6 @@ namespace Programa
                 // Obtener el nombre del vehículo seleccionado
                 string nombreVehiculoSeleccionado = comboBox2.SelectedItem.ToString();
 
-                // Conectarse a la base de datos y crear el comando SQL para obtener el estado del vehículo seleccionado
-                // ...
-                // Ejecutar el comando SQL y obtener el estado del vehículo seleccionado
-                // ...
                 comboBox3.Items.Clear();
                 // Habilitar el tercer ComboBox
                 comboBox3.Enabled = true;
@@ -330,7 +326,7 @@ namespace Programa
                 {
                     // Validar el formato de la fecha
                     // Crear un nuevo control TimePicker y configurarlo
-                    FrmTimePicker form = new FrmTimePicker();
+                    FrmTimePicker form = new FrmTimePicker ();
 
                     // Especificar el formulario padre y establecer la propiedad StartPosition en CenterParent
                     form.Owner = this; // this hace referencia al formulario que llama a FrmTimePicker
@@ -342,24 +338,96 @@ namespace Programa
                     if (form.DialogResult == DialogResult.OK)
                     {
                         DateTime fechaSeleccionada = form.FechaSeleccionada;
-                        MessageBox.Show(fechaSeleccionada.ToString());
-                        // Haz lo que necesites con la fecha seleccionada
+                        
+                        string fechaString = fechaSeleccionada.ToString("yyyy-MM-dd");
+                        fechaString = "'"+fechaString+"'";
+
+                        string tableName = "siniestro";
+;
+                        int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
+                        string condition = $"`id` = {id}";
+                        Dictionary<string, object> values = new Dictionary<string, object>
+                        {
+                            { columnName, fechaString }
+                        };
+                        bool success = connector.Update(tableName, values, condition);
+
+                        if (success)
+                        {
+                            MessageBox.Show("El valor ha sido actualizado correctamente.");
+                            LlenarDataGridView();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha ocurrido un error al actualizar el valor.");
+                        }
                     }
-                    //Regex regex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
-                    //if (!regex.IsMatch(value))
-                    //{
-                    //    MessageBox.Show("El formato de la fecha debe ser yyyy-MM-dd.");
-                    //    return;
-                    //}
+
                 }
-                else if(columnName == "cliente_afectado")
+                else if(columnName == "cliente_afectado" || columnName == "vehiculo_afectado")
                 {
                     
-                }
-                else if(columnName == "vehiculo_afectado")
-                {
+                     string columnNameCliente = "cliente_afectado_id";
                     
-                }
+                    
+                     string columNameVehiculo = "vehiculo_afectado_id";
+                    
+
+
+
+ 
+                    FrmClientesAutos form = new FrmClientesAutos();
+
+                    // Especificar el formulario padre y establecer la propiedad StartPosition en CenterParent
+                    form.Owner = this; // this hace referencia al formulario que llama a FrmTimePicker
+                    form.StartPosition = FormStartPosition.CenterParent;
+
+                    // Mostrar el formulario FrmTimePicker como un cuadro de diálogo modal
+                    form.ShowDialog();
+                    // Se ejecuta después de que se cierra el formulario secundario
+                    if (form.DialogResult == DialogResult.OK)
+                    {
+                        string clienteAutoSelecionado = form.clienteAutoSelecionado;
+
+                        string[] arrayclintesAutos =   clienteAutoSelecionado.Split('-');
+                        string cliente = arrayclintesAutos[0];
+                        string vehiculo = arrayclintesAutos[1];
+
+                        Dictionary<string, object>[] vehiculos = connector.Select("vehiculos");
+                        Dictionary<string, object>[] clientes = connector.Select("clientes");
+
+                        int idClienteSeleccionado = Convert.ToInt32(clientes.First(c => c["nombre"].ToString() == cliente)["id"]);
+                        int idVehiculoSeleccionado = Convert.ToInt32(vehiculos.First(c => c["nombre"].ToString() == vehiculo)["id"]);
+
+                        string tableName = "siniestro";
+                        //;
+                        int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
+                        string condition = $"`id` = {id}";
+                        Dictionary<string, object> values = new Dictionary<string, object>
+                        {
+                            { columnNameCliente, idClienteSeleccionado}
+                        };
+                        bool success = connector.Update(tableName, values, condition);
+                        
+                        Dictionary<string, object> values2 = new Dictionary<string, object>
+                        {
+                            { columNameVehiculo, idVehiculoSeleccionado}
+                        };
+                        bool success2 = connector.Update(tableName, values2, condition);
+
+
+
+                        if (success)
+                        {
+                            MessageBox.Show("El valor ha sido actualizado correctamente.");
+                            LlenarDataGridView();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha ocurrido un error al actualizar el valor.");
+                        }
+                    }
+                }                
                 else if(columnName == "danio")
                 {
                     

@@ -37,3 +37,4 @@ C:\Users\Admin\Documents\cmmi\Equipo4\Programa\Programa\obj\Debug\Programa.exe
 C:\Users\Admin\Documents\cmmi\Equipo4\Programa\Programa\obj\Debug\Programa.pdb
 C:\Users\Admin\Documents\cmmi\Equipo4\Programa\Programa\obj\Debug\Programa.FormAjustador.resources
 C:\Users\Admin\Documents\cmmi\Equipo4\Programa\Programa\obj\Debug\Programa.FrmTimePicker.resources
+C:\Users\Admin\Documents\cmmi\Equipo4\Programa\Programa\obj\Debug\Programa.FrmClientesAutos.resources
