@@ -343,7 +343,7 @@ namespace Programa
                         fechaString = "'"+fechaString+"'";
 
                         string tableName = "siniestro";
-;
+
                         int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
                         string condition = $"`id` = {id}";
                         Dictionary<string, object> values = new Dictionary<string, object>
@@ -428,9 +428,55 @@ namespace Programa
                         }
                     }
                 }                
-                else if(columnName == "danio")
+                else if(columnName == "danio_id")
                 {
-                    
+                   
+                    // Crear un nuevo control TimePicker y configurarlo
+                    FrmDanio form = new FrmDanio();
+
+                    // Especificar el formulario padre y establecer la propiedad StartPosition en CenterParent
+                    form.Owner = this; // this hace referencia al formulario que llama a FrmTimePicker
+                    form.StartPosition = FormStartPosition.CenterParent;
+
+                    // Mostrar el formulario FrmTimePicker como un cuadro de diálogo modal
+                    form.ShowDialog();
+                    // Se ejecuta después de que se cierra el formulario secundario
+                    if (form.DialogResult == DialogResult.OK)
+                    {
+                        string danioString = form.danioSelecionado;
+                        int id_danio = 0;
+                        if (danioString == "reparable")
+                        {
+                            id_danio = 1;
+                        }
+                        else if(danioString == "no reparable")
+                        {
+                            id_danio = 2;
+                        }
+
+
+                       
+                        string tableName = "siniestro";
+
+                        int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["id"].Value);
+                        string condition = $"`id` = {id}";
+                        Dictionary<string, object> values = new Dictionary<string, object>
+                        {
+                            { columnName , id_danio }
+                        };
+                        bool success = connector.Update(tableName, values, condition);
+
+                        if (success)
+                        {
+                            MessageBox.Show("El valor ha sido actualizado correctamente.");
+                            LlenarDataGridView();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ha ocurrido un error al actualizar el valor.");
+                        }
+                    }
+
                 }
                 else
                 {

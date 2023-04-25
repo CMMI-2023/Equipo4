@@ -107,6 +107,12 @@
     <Compile Include="FrmClientesAutos.Designer.cs">
       <DependentUpon>FrmClientesAutos.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmDanio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDanio.Designer.cs">
+      <DependentUpon>FrmDanio.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmTimePicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -127,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmClientesAutos.resx">
       <DependentUpon>FrmClientesAutos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDanio.resx">
+      <DependentUpon>FrmDanio.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmTimePicker.resx">
       <DependentUpon>FrmTimePicker.cs</DependentUpon>
